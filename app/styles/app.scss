@@ -1,6 +1,9 @@
 body{
   padding: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  .mdl-layout__header{
+    background-color: steelblue;
+  }
 }
 
 a{ color: #00B7FF; }
@@ -10,15 +13,23 @@ a{ color: #00B7FF; }
   color: #000000;
 }
 
-
-.pitch-slider{
-  width: 400px;
-  margin-top: 200px;
-  display: inline-block;
-  margin-left: -100px;
-  margin-right: -100px;
+.line-container{
+  display: flex;
+  & > div { flex-direction: column; justify-content: center; display: flex; }
 }
 
+.pitch-slider{
+  width: 200px;
+  display: inline-block;
+}
+.slider-handle{
+  background-color: steelblue;
+  background-image: linear-gradient(to bottom, steelblue 0%, #0480be 100%);
+}
+
+.mdl-button.mdl-button--colored{
+  color: steelblue;
+}
 .but{
   display: inline-block;
   margin-right: 100px;
