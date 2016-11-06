@@ -22,13 +22,13 @@
       <div class="inline-block">
         <div class="pitch-slider">
           <input class="mdl-slider mdl-js-slider" type="range"
-                 min="-50" max="50" value="0" tabindex="0" onchange="pitched(this.value)">
+                 min="-50" max="50" value="0" tabindex="0" {{action "pitched(this.value)" on='change'}}>
         </div>
         <div class="but">
-          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onmousedown="clicked()">
+          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'clicked' on='onmousedown'}}>
             <i class="material-icons">mood</i>
           </button>
-          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onmousedown="stop()">
+          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'stop' on='onmousedown'}}>
             <i class="material-icons">sentiment_dissatisfied</i>
           </button>
         </div>
@@ -38,5 +38,6 @@
       </div>
     </div>
   </main>
+  {{test}}
 </div>
 {{outlet}}
