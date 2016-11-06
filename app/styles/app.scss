@@ -1,0 +1,45 @@
+body{
+  padding: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a{ color: #00B7FF; }
+
+.demo-layout-transparent .mdl-layout__header,
+.demo-layout-transparent .mdl-layout__drawer-button{
+  color: #000000;
+}
+
+
+.pitch-slider{
+  width: 400px;
+  margin-top: 200px;
+  transform: rotate(-90deg);
+  display: inline-block;
+  margin-left: -100px;
+  margin-right: -100px;
+}
+
+.but{
+  display: inline-block;
+  margin-right: 100px;
+}
+
+.d3-canvas-container {
+  width: 600px;
+  display: inline-block;
+}
+path{
+  stroke: steelblue;
+  stroke-width: 2;
+  fill: none;
+}
+
+
+.axis path,
+.axis line{
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}

@@ -3,6 +3,7 @@
 module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'music',
+    podModulePrefix: 'music/pods',
     environment: environment,
     rootURL: '/',
     locationType: 'auto',
@@ -20,6 +21,15 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+    contentSecurityPolicy: {
+      'default-src': "'none'",
+      'script-src': "'self'",
+      'font-src': "'self'  fonts.googleapis.com fonts.gstatic.com",
+      'connect-src': "'self'",
+      'style-src': "'self' 'unsafe-inline' fonts.googleapis.com",
+      'img-src': "'self' data:",
+      'media-src': "'self'"
     }
   };
 

@@ -1,0 +1,42 @@
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span class="mdl-layout-title">Music</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <nav class="mdl-navigation mdl-layout--large-screen-only">
+        <a class="mdl-navigation__link" href=""></a>
+      </nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Music</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href=""></a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content">
+      <div class="inline-block">
+        <div class="pitch-slider">
+          <input class="mdl-slider mdl-js-slider" type="range"
+                 min="-50" max="50" value="0" tabindex="0" onchange="pitched(this.value)">
+        </div>
+        <div class="but">
+          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onmousedown="clicked()">
+            <i class="material-icons">mood</i>
+          </button>
+          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" onmousedown="stop()">
+            <i class="material-icons">sentiment_dissatisfied</i>
+          </button>
+        </div>
+        <div class="d3-canvas-container">
+          <div id="d3-canvas"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+{{outlet}}
