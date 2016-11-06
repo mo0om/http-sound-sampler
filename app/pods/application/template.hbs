@@ -35,12 +35,31 @@
           }}
         </div>
         <div class="but">
-          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'playSound' on='mouseDown'}}>
-            <i class="material-icons">mood</i>
-          </button>
-          <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'stop' on='mouseDown'}}>
-            <i class="material-icons">sentiment_dissatisfied</i>
-          </button>
+          <input id="wav-file" type="file">
+          <div class="recorder">
+            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'playLoop' on='mouseDown'}}>
+              <i class="material-icons">repeat</i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'stop' on='mouseDown'}}>
+              <i class="material-icons">stop</i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'playOnce' on='mouseDown'}}>
+              <i class="material-icons">play_arrow</i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'stop' on='mouseDown'}}>
+              <i class="material-icons">fiber_manual_record</i>
+            </button>
+            <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'stop' on='mouseDown'}}>
+              <i class="material-icons">keyboard_voice</i>
+            </button>
+          </div>
+          <div class="albums">
+            {{#each allSourcesComputed as |source|}}
+              <button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored" {{action 'togglePlay' source on='mouseDown'}} disabled={{if source.started false true}}>
+                <i class="material-icons">album</i>
+              </button>
+            {{/each}}
+          </div>
         </div>
         <div class="d3-canvas-container">
           <div id="d3-canvas"></div>

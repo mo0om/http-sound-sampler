@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import computed, {readOnly} from 'ember-computed-decorators'
 
 export default Ember.Controller.extend({
   // == Dependencies ==========================================================
@@ -13,8 +14,24 @@ export default Ember.Controller.extend({
   svg: null,
   d3Width: 600,
   d3Height: 300,
+  loop: true,
+  allSources: Ember.ArrayProxy.create({ content: Ember.A() }),
+  semitones: 0,
+  ls: 0,
+  le: 100,
 
   // == Computed Properties ===================================================
+
+  @readOnly
+  @computed('allSources', 'allSources.[]')
+  /**
+   * Will display a loader as long as the data is being fetched from the server
+   * @param {Boolean} isFetchingRecordsLoader - true while fetching
+   * @returns {Boolean} is it fetching?
+   */
+  allSourcesComputed (allSources) {
+    return allSources
+  },
 
   // == Functions =============================================================
 
@@ -22,21 +39,36 @@ export default Ember.Controller.extend({
     this._super (...arguments)
     let that = this
     Ember.run.schedule('afterRender', this, function () {
-      this.set('allSources', [])
-      this.set('semitones', 0)
-      this.set('ls', 0)
-      this.set('le', 100)
       this.set('context', new AudioContext())
       this.set('analyser', this.get('context').createAnalyser())
       this.set('analyser.fftSize', 2048)
       this.set('bufferLength', this.get('analyser.frequencyBinCount'))
       this.set('dataArray', new Uint8Array(this.get('bufferLength')))
       this.loadDogSound('/audio/beep.wav')
-      let d3Canvas = d3.select('#d3-canvas')
-        .append('svg')
-        .attr('width', that.get('d3Width') + 'px')
-        .attr('height', that.get('d3Height') + 'px')
-      this.set('svg', d3Canvas)
+      Ember.$('#wav-file').change(function (e) {
+        let files = e.target.files[0]
+        var types = !((/audio\/mpeg|audio\/mp3|audio\/mp4|audio\/ogg|audio\/x+|wav/).test(files.type))
+
+        if(!!types){
+          alert('no audio file')
+          return
+        }
+
+        let reader = new FileReader()
+        reader.onload = function () {
+          let arrayBuffer = reader.result
+          let context = that.get('context')
+          context.decodeAudioData(arrayBuffer, function(buffer) {
+            that.set('beep', buffer)
+            // displayBuffer(buffer);
+
+            that.drawD3(buffer);
+          }, that.onError);
+        }
+        reader.readAsArrayBuffer(files);
+        console.log('wav Changed: ',files)
+
+      })
     })
   },
 
@@ -80,7 +112,11 @@ export default Ember.Controller.extend({
     y.domain([-1, 1]);
 
     // Add the valueline path.
-    let svg = this.get('svg')
+    d3.select('#d3-canvas svg').remove()
+    let svg = d3.select('#d3-canvas')
+      .append('svg')
+      .attr('width', that.get('d3Width') + 'px')
+      .attr('height', that.get('d3Height') + 'px')
     svg.append("path")
       .attr("class", "line")
       .attr("d", valueline(lc));
@@ -101,7 +137,7 @@ export default Ember.Controller.extend({
       if (!d3.event.selection) return; // Ignore empty selections.
 
       that.set('ls', 100 * d3.event.selection[0] / that.get('d3Width'))
-      that.set('le', 100 * d3.event.selection[1] / that.get('d3Height'))
+      that.set('le', 100 * d3.event.selection[1] / that.get('d3Width'))
       var source = that.createSource()
       source.source.connect(that.get('analyser'))
     }
@@ -115,13 +151,31 @@ export default Ember.Controller.extend({
     let source = this.get('context').createBufferSource(); // creates a sound source
     source.buffer = beep;                    // tell the source which sound to play
     let semitoneRatio = Math.pow(2, 1/12);
-    source.loop = loop ? true : false;
+    source.loop = this.get('loop')
     source.loopStart = loopStartVal;
     source.loopEnd = loopEndVal;
     source.playbackRate.value = Math.pow(semitoneRatio, this.get('semitones'))
     return {
       source: source,
       loopStartVal: loopStartVal
+    }
+  },
+
+  wavChanged: function (e) {
+    if (this.files) {
+      let reader = new FileReader()
+      reader.onload = function () {
+        let arrayBuffer = reader.result
+        let context = that.get('context')
+        context.decodeAudioData(arrayBuffer, function(buffer) {
+          that.set('beep', buffer)
+          // displayBuffer(buffer);
+
+          that.drawD3(buffer);
+        }, that.onError);
+      }
+      reader.readAsDataURL(this.files[0]);
+      console.log('wav Changed: ',this.files)
     }
   },
 
@@ -139,17 +193,39 @@ export default Ember.Controller.extend({
       }
 
     },
-    playSound: function () {
+
+    playLoop: function (e) {
+      this.set('loop', true)
+      var source = this.createSource(true)
+      source.source.connect(this.get('context').destination)       // connect the source to the context's destination (the speakers)
+      source.source.start(0, source.loopStartVal)
+      source.source.started = true
+      this.get('allSources').addObject(source.source)
+      // note: on older systems, may have to use deprecated noteOn(time);
+    },
+
+    playOnce: function (e) {
+      this.set('loop', false)
       var source = this.createSource(true);
       source.source.connect(this.get('context').destination);       // connect the source to the context's destination (the speakers)
       source.source.start(0, source.loopStartVal);
-      this.get('allSources').push(source.source)
       // note: on older systems, may have to use deprecated noteOn(time);
     },
+
     stop: function () {
       this.get('allSources').forEach(function (aSource) {
         aSource.stop()
       })
+      this.get('allSources').clear()
+    },
+    togglePlay: function (e) {
+      if (e.started) {
+        e.disconnect()
+        Ember.set(e, 'started', false)
+      } else {
+        e.connect(this.get('context').destination)
+        Ember.set(e, 'started', true)
+      }
     }
   }
 });

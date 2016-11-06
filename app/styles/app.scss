@@ -15,6 +15,7 @@ a{ color: #00B7FF; }
 
 .line-container{
   display: flex;
+  padding: 20px;
   & > div { flex-direction: column; justify-content: center; display: flex; }
 }
 
@@ -31,8 +32,9 @@ a{ color: #00B7FF; }
   color: steelblue;
 }
 .but{
-  display: inline-block;
-  margin-right: 100px;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
 }
 
 .d3-canvas-container {
@@ -45,6 +47,7 @@ path{
   fill: none;
 }
 
+.brush .overlay{ fill: steelblue; fill-opacity: 0.2; }
 
 .axis path,
 .axis line{

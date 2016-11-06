@@ -43,6 +43,7 @@
     "ui-ember-slider": "0.4.1"
   },
   "dependencies": {
+    "ember-computed-decorators": "^0.2.2",
     "material-design-lite": "^1.2.1"
   }
 }
