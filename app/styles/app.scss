@@ -4,6 +4,11 @@ body{
   .mdl-layout__header{
     background-color: steelblue;
   }
+  main{
+    .page-content{ display: flex; align-items: center; flex-direction: column;
+      .line-container{ width: 1100px; }
+    }
+  }
 }
 
 a{ color: #00B7FF; }
