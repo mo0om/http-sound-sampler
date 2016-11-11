@@ -9,6 +9,7 @@
 /bower_components
 
 # misc
+martinmusic.pem
 /.sass-cache
 /connect.lock
 /coverage/*
