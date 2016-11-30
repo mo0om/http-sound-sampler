@@ -21,7 +21,9 @@
     "andThen",
     "currentURL",
     "currentPath",
-    "currentRouteName"
+    "currentRouteName",
+    "d3",
+    "AudioContext"
   ],
   "node": false,
   "browser": false,
@@ -48,5 +50,6 @@
   "white": false,
   "eqnull": true,
   "esversion": 6,
-  "unused": true
+  "unused": true,
+  "expr": true
 }
